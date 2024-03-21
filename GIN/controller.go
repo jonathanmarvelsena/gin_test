@@ -15,8 +15,7 @@ func CreateItem(c *gin.Context) {
 		return
 	}
 
-	// Save newItem to the database (e.g., using ORM or database driver)
-	// Example:
+	// Save newItem to the database
 	db.Create(&newItem)
 
 	c.JSON(http.StatusCreated, newItem)
@@ -33,7 +32,6 @@ func GetItems(c *gin.Context) {
 func GetItemByID(c *gin.Context) {
 	id := c.Param("id")
 	// Retrieve item from the database based on id
-	// Example:
 	var item m.Item
 	db.First(&item, "id = ?", id)
 
@@ -55,7 +53,6 @@ func UpdateItem(c *gin.Context) {
 	}
 
 	// Update item in the database based on id
-	// Example:
 	db.Model(&m.Item{}).Where("id = ?", id).Updates(updatedItem)
 
 	c.JSON(http.StatusOK, updatedItem)
@@ -64,7 +61,6 @@ func UpdateItem(c *gin.Context) {
 func DeleteItem(c *gin.Context) {
 	id := c.Param("id")
 	// Delete item from the database based on id
-	// Example:
 	db.Where("id = ?", id).Delete(&m.Item{})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Item deleted"})

@@ -1,18 +1,32 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	m "GIN/model"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
-	router := gin.Default()
+	err := Connect()
+	if err != nil {
+		panic(err)
+	}
 
-	// Endpoints
-	router.POST("/items", CreateItem)
-	router.GET("/items", GetItems)
-	router.GET("/items/:id", GetItemByID)
-	router.PUT("/items/:id", UpdateItem)
-	router.DELETE("/items/:id", DeleteItem)
+	r := SetupRouter(db)
+	r.Run(":8888")
+}
 
-	router.Run(":8080")
+func Connect() error {
+	var err error
+	// Open a database connection
+	db, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		return err
+	}
+
+	// Auto Migrate the Database
+	db.AutoMigrate(&m.Item{})
+
+	return nil
 }
